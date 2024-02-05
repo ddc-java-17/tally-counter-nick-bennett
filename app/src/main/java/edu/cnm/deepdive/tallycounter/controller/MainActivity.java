@@ -9,29 +9,26 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import edu.cnm.deepdive.tallycounter.R;
+import edu.cnm.deepdive.tallycounter.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
 
   private static final String TAG = MainActivity.class.getSimpleName();
 
-  private TextView tally;
   private int counter;
+  private ActivityMainBinding binding;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-
-
     Log.d(TAG, "MainActivity::onCreate");
-    setContentView(R.layout.activity_main);
-    tally = findViewById(R.id.tally);
+    binding = ActivityMainBinding.inflate(getLayoutInflater());
+    setContentView(binding.getRoot());
     if (savedInstanceState != null) {
       setCounter(savedInstanceState.getInt("counter", 0));
     } else {
       setCounter(0);
     }
-    Button increment = findViewById(R.id.increment);
-//    increment.setOnClickListener(this::handleIncrement);
   }
 
   @Override
@@ -89,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
 
   private void setCounter(int counter) {
     this.counter = counter;
-    tally.setText(String.valueOf(counter));
+    binding.tally.setText(String.valueOf(counter));
   }
 
 }
