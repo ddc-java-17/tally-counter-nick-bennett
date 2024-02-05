@@ -31,13 +31,12 @@ public class MainActivity extends AppCompatActivity {
       setCounter(0);
     }
     Button increment = findViewById(R.id.increment);
-    OnClickListener incrementListener = new OnClickListener() {
+    increment.setOnClickListener(new OnClickListener() {
       @Override
       public void onClick(View v) {
         setCounter(counter + 1);
       }
-    };
-    increment.setOnClickListener(incrementListener);
+    });
   }
 
   @Override
