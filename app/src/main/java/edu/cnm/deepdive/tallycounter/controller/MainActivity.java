@@ -20,6 +20,14 @@ public class MainActivity extends AppCompatActivity {
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+
+    class IncrementListener implements OnClickListener {
+      @Override
+      public void onClick(View v) {
+        setCounter(counter + 1);
+      }
+    }
+
     Log.d(TAG, "MainActivity::onCreate");
     setContentView(R.layout.activity_main);
     tally = findViewById(R.id.tally);
@@ -84,15 +92,6 @@ public class MainActivity extends AppCompatActivity {
   private void setCounter(int counter) {
     this.counter = counter;
     tally.setText(String.valueOf(counter));
-  }
-
-  private class IncrementListener implements OnClickListener {
-
-    @Override
-    public void onClick(View v) {
-      setCounter(counter + 1);
-    }
-
   }
 
 }
