@@ -2,6 +2,7 @@ package edu.cnm.deepdive.tallycounter.viewmodel;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 import edu.cnm.deepdive.tallycounter.Subtally;
 import java.time.Instant;
@@ -12,10 +13,16 @@ public class MainViewModel extends ViewModel {
 
   private final MutableLiveData<Integer> counter;
   private final MutableLiveData<List<Subtally>> subtallies;
+  private final LiveData<Integer> total;
 
   public MainViewModel() {
     counter = new MutableLiveData<>(0);
     subtallies = new MutableLiveData<>(new LinkedList<>());
+    total = Transformations.map(subtallies, (subtallies) ->
+        subtallies
+            .stream()
+            .mapToInt(Subtally::value)
+            .sum());
   }
 
   public LiveData<Integer> getCounter() {
@@ -24,6 +31,10 @@ public class MainViewModel extends ViewModel {
 
   public LiveData<List<Subtally>> getSubtallies() {
     return subtallies;
+  }
+
+  public LiveData<Integer> getTotal() {
+    return total;
   }
 
   public void resetCounterValue() {
@@ -35,7 +46,9 @@ public class MainViewModel extends ViewModel {
     counter.setValue(counter.getValue() + 1);
   }
 
-  /** @noinspection DataFlowIssue*/
+  /**
+   * @noinspection DataFlowIssue
+   */
   public void captureSubtally() {
     Subtally subtally = new Subtally(Instant.now(), counter.getValue());
     subtallies.getValue().add(subtally);
