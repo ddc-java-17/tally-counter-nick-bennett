@@ -2,10 +2,8 @@ package edu.cnm.deepdive.tallycounter.controller;
 
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.ArrayAdapter;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import edu.cnm.deepdive.tallycounter.Subtally;
 import edu.cnm.deepdive.tallycounter.databinding.ActivityMainBinding;
@@ -17,6 +15,7 @@ public class MainActivity extends AppCompatActivity {
 
   private ActivityMainBinding binding;
   private MainViewModel viewModel;
+  private ArrayAdapter<Subtally> adapter;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -24,20 +23,25 @@ public class MainActivity extends AppCompatActivity {
     Log.d(TAG, "MainActivity::onCreate");
     binding = ActivityMainBinding.inflate(getLayoutInflater());
     setContentView(binding.getRoot());
-    viewModel = new ViewModelProvider(this)
-        .get(MainViewModel.class);
-    viewModel
-        .getCounter()
-        .observe(this, this::setTallyDisplay);
+    adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1);
+    binding.subtallies.setAdapter(adapter);
+    viewModel = new ViewModelProvider(this).get(MainViewModel.class);
+    binding.setLifecycleOwner(this);
+    binding.setViewmodel(viewModel);
     viewModel
         .getSubtallies()
         .observe(this, (subtallies) -> {
-          ArrayAdapter<Subtally> adapter =
-              new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, subtallies);
-          binding.subtallies.setAdapter(adapter);
+          adapter.clear();
+          adapter.addAll(subtallies);
         });
+/*
+    viewModel
+        .getCounter()
+        .observe(this, this::setTallyDisplay);
+*/
   }
 
+/*
   public void handleIncrement(View v) {
     viewModel.incrementCounterValue();
   }
@@ -49,5 +53,6 @@ public class MainActivity extends AppCompatActivity {
   private void setTallyDisplay(int counter) {
     binding.tally.setText(String.valueOf(counter));
   }
+*/
 
 }
